@@ -16,9 +16,9 @@ type authorizer struct {
 // Subject function get subject
 type Subject func(c *gin.Context) string
 
-// NewtAuthorizer returns the authorizer
+// NewAuthorizer returns the authorizer
 // uses a Casbin enforcer and Subject function as input
-func NewtAuthorizer(e *casbin.Enforcer, s Subject) gin.HandlerFunc {
+func NewAuthorizer(e *casbin.Enforcer, s Subject) gin.HandlerFunc {
 	jwt := &authorizer{e, s}
 	return func(c *gin.Context) {
 		//checks the userName,path,method permission combination from the request.
