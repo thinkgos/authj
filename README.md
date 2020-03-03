@@ -1,4 +1,4 @@
-# Authj
+# authj
 
 [![GoDoc](https://godoc.org/github.com/thinkgos/authj?status.svg)](https://godoc.org/github.com/thinkgos/authj)
 [![Build Status](https://travis-ci.org/thinkgos/authj.svg)](https://travis-ci.org/thinkgos/authj)
@@ -9,7 +9,7 @@
 
 
 
-Authj is an authorization middleware for [Gin](https://github.com/gin-gonic/gin), it's based on
+authj is an authorization middleware for [Gin](https://github.com/gin-gonic/gin), it's based on
  [casbin](https://github.com/casbin/casbin).
 
 ## Installation
