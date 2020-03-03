@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// jwtAuthorizer stores the casbin handler
-type jwtAuthorizer struct {
+// authorizer stores the casbin handler
+type authorizer struct {
 	*casbin.Enforcer
 	Subject
 }
@@ -19,7 +19,7 @@ type Subject func(c *gin.Context) string
 // NewtAuthorizer returns the authorizer
 // uses a Casbin enforcer and Subject function as input
 func NewtAuthorizer(e *casbin.Enforcer, s Subject) gin.HandlerFunc {
-	jwt := &jwtAuthorizer{e, s}
+	jwt := &authorizer{e, s}
 	return func(c *gin.Context) {
 		//checks the userName,path,method permission combination from the request.
 		allowed, err := jwt.Enforce(jwt.Subject(c), c.Request.URL.Path, c.Request.Method)
