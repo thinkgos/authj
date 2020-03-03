@@ -10,7 +10,7 @@
 
 
 Authj is an authorization middleware for [Gin](https://github.com/gin-gonic/gin), it's based on
- [https://github.com/casbin/casbin](https://github.com/casbin/casbin).
+ [casbin](https://github.com/casbin/casbin).
 
 ## Installation
 
@@ -61,8 +61,8 @@ For how to write authorization policy and other details, please refer to [the Ca
 ## Getting Help
 
 - [Casbin](https://github.com/casbin/casbin)
-- [Gin](github.com/gin-gonic/gin)
-- [Gin-authz](github.com/gin-contrib/authz)
+- [Gin](https://github.com/gin-gonic/gin)
+- [Gin-authz](https://github.com/gin-contrib/authz)
 
 ## License
 
