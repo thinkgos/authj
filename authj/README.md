@@ -1,13 +1,6 @@
 # authj
 
-[![GoDoc](https://godoc.org/github.com/thinkgos/authj?status.svg)](https://godoc.org/github.com/thinkgos/authj)
-[![Build Status](https://travis-ci.org/thinkgos/authj.svg)](https://travis-ci.org/thinkgos/authj)
-[![codecov](https://codecov.io/gh/thinkgos/authj/branch/master/graph/badge.svg)](https://codecov.io/gh/thinkgos/authj)
-![Action Status](https://github.com/thinkgos/authj/workflows/Go/badge.svg)
-[![Go Report Card](https://goreportcard.com/badge/github.com/thinkgos/authj)](https://goreportcard.com/report/github.com/thinkgos/authj)
-[![Licence](https://img.shields.io/github/license/thinkgos/authj)](https://raw.githubusercontent.com/thinkgos/authj/master/LICENSE)
-
-
+[![GoDoc](https://godoc.org/github.com/thinkgos/gin-middlewares/authj?status.svg)](https://godoc.org/github.com/thinkgos/gin-middlewares/authj)
 
 authj is an authorization middleware for [Gin](https://github.com/gin-gonic/gin), it's based on
  [casbin](https://github.com/casbin/casbin).
@@ -27,7 +20,7 @@ import (
     "net/http"
 
     "github.com/casbin/casbin/v2"
-    "github.com/thinkgos/authj"
+    "github.com/thinkgos/gin-middlewares/authj"
     "github.com/gin-gonic/gin"
 )
 
