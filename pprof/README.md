@@ -1,6 +1,6 @@
 # pprof
 
-[![GoDoc](https://godoc.org/github.com/gin-middlewares/pprof?status.svg)](https://godoc.org/github.com/gin-middlewares/pprof)
+[![GoDoc](https://godoc.org/github.com/thinkgos/gin-middlewares/pprof?status.svg)](https://godoc.org/github.com/thinkgos/gin-middlewares/pprof)
 
 gin pprof middleware
 
@@ -19,7 +19,7 @@ Download and install it:
 Import it in your code:
 
 ```go
-    import "github.com/gin-middlewares/pprof"
+    import "github.com/thinkgos/gin-middlewares/pprof"
 ```
 
 ### Example
@@ -28,7 +28,7 @@ Import it in your code:
 package main
 
 import (
-    "github.com/gin-middlewares/pprof"
+    "github.com/thinkgos/gin-middlewares/pprof"
     "github.com/gin-gonic/gin"
 )
 
