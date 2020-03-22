@@ -1,4 +1,4 @@
-module github.com/thinkgos/authj
+module github.com/thinkgos/gin-middlewares
 
 go 1.13
 
