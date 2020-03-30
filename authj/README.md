@@ -34,10 +34,11 @@ func main() {
     // define your router, and use the Casbin authj middleware.
     // the access that is denied by authj will return HTTP 403 error.
     router := gin.New()
-    router.Use(authj.NewAuthorizer(e, authj.Subject(func(c *gin.Context) string {
-        // return subject like username
-        return "admin"
-    })))
+    router.Use(func(c *gin.Context) {
+        // got subject
+        authj.ContextWithSubject(c, "admin")
+    })
+    router.Use(authj.NewAuthorizer(e))
 }
 ```
 
