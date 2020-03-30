@@ -25,16 +25,16 @@ func TestRequestID(t *testing.T) {
 			},
 			"RequestID: req-123456",
 		},
-		//"Retrieves Request Id from custom header": {
-		//	"X-Trace-Id",
-		//	func() *http.Request {
-		//		req, _ := http.NewRequest("GET", "/", nil)
-		//		req.Header.Add("X-Trace-Id", "trace:abc123")
-		//
-		//		return req
-		//	},
-		//	"RequestID: trace:abc123",
-		//},
+		"Retrieves Request Id from custom header": {
+			"X-Trace-Id",
+			func() *http.Request {
+				req, _ := http.NewRequest("GET", "/", nil)
+				req.Header.Add("X-Trace-Id", "trace:abc123")
+
+				return req
+			},
+			"RequestID: trace:abc123",
+		},
 	}
 
 	for _, test := range tests {
@@ -48,7 +48,7 @@ func TestRequestID(t *testing.T) {
 		r.GET("/", func(c *gin.Context) {
 			requestID := FromRequestID(c)
 			response := fmt.Sprintf("RequestID: %s", requestID)
-			w.Write([]byte(response))
+			w.WriteString(response)
 
 		})
 		r.ServeHTTP(w, test.request())
