@@ -40,14 +40,7 @@ func NewAuthorizer(e *casbin.Enforcer) gin.HandlerFunc {
 
 // subject returns the value associated with this context for subjectCtxKey,
 func subject(c *gin.Context) string {
-	v, exist := c.Get(contextKey)
-	if !exist {
-		return ""
-	}
-	if s, ok := v.(string); ok {
-		return s
-	}
-	return ""
+	return c.GetString(contextKey)
 }
 
 // ContextWithSubject return a copy of parent in which the value associated with
