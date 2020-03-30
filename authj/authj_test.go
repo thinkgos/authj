@@ -26,7 +26,7 @@ func testAuthjRequest(t *testing.T, router *gin.Engine, user string, path string
 
 func TestBasic(t *testing.T) {
 	router := gin.New()
-	e, _ := casbin.NewEnforcer("authz_model.conf", "authz_policy.csv")
+	e, _ := casbin.NewEnforcer("authj_model.conf", "authj_policy.csv")
 
 	router.Use(func(context *gin.Context) {
 		ContextWithSubject(context, "alice")
@@ -44,7 +44,7 @@ func TestBasic(t *testing.T) {
 
 func TestPathWildcard(t *testing.T) {
 	router := gin.New()
-	e, _ := casbin.NewEnforcer("authz_model.conf", "authz_policy.csv")
+	e, _ := casbin.NewEnforcer("authj_model.conf", "authj_policy.csv")
 
 	router.Use(func(context *gin.Context) {
 		ContextWithSubject(context, "bob")
@@ -72,7 +72,7 @@ func TestPathWildcard(t *testing.T) {
 
 func TestRBAC(t *testing.T) {
 	router := gin.New()
-	e, _ := casbin.NewEnforcer("authz_model.conf", "authz_policy.csv")
+	e, _ := casbin.NewEnforcer("authj_model.conf", "authj_policy.csv")
 
 	router.Use(func(context *gin.Context) {
 		ContextWithSubject(context, "cathy")

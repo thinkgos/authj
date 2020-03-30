@@ -26,7 +26,7 @@ import (
 
 func main() {
     // load the casbin model and policy from files, database is also supported.
-    e ,err := casbin.NewEnforcer("authz_model.conf", "authz_policy.csv")
+    e ,err := casbin.NewEnforcer("authj_model.conf", "authj_policy.csv")
     if err!= nil{
         panic(err)    
     }   
