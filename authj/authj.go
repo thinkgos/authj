@@ -1,16 +1,17 @@
 package authj
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 )
 
-// contextKey is a value for use with context.WithValue. It's used as
+// cttAuthKey is a value for use with context.WithValue. It's used as
 // a pointer so it fits in an interface{} without allocation. This technique
 // for defining context keys was copied from Go 1.7's new use of context in net/http.
-const contextKey = "authorizer_key"
+type cttAuthKey struct{}
 
 // NewAuthorizer returns the authorizer
 // uses a Casbin enforcer and Subject function as input
@@ -40,11 +41,13 @@ func NewAuthorizer(e *casbin.Enforcer) gin.HandlerFunc {
 
 // subject returns the value associated with this context for subjectCtxKey,
 func subject(c *gin.Context) string {
-	return c.GetString(contextKey)
+	v, _ := c.Request.Context().Value(cttAuthKey{}).(string)
+	return v
 }
 
 // ContextWithSubject return a copy of parent in which the value associated with
 // subjectCtxKey is subject.
 func ContextWithSubject(c *gin.Context, subject string) {
-	c.Set(contextKey, subject)
+	ctx := context.WithValue(c.Request.Context(), cttAuthKey{}, subject)
+	c.Request = c.Request.WithContext(ctx)
 }

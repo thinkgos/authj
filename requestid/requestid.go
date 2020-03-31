@@ -7,6 +7,7 @@ package requestid
 // https://github.com/go-chi/chi/blob/master/middleware
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
@@ -18,7 +19,7 @@ import (
 )
 
 // Key to use when setting the request ID.
-const ctxKeyRequestID = "ctxRequestId_key"
+type ctxKeyRequestID struct{}
 
 // RequestIDHeader is the name of the HTTP Header which contains the request id.
 // Exported so that it can be changed by developers
@@ -71,14 +72,17 @@ func RequestID(c *gin.Context) {
 	if requestID == "" {
 		requestID = nextRequestID()
 	}
-	c.Set(ctxKeyRequestID, requestID)
+	ctx := context.WithValue(c.Request.Context(), ctxKeyRequestID{}, requestID)
+	c.Request = c.Request.WithContext(ctx)
 	c.Next()
 }
 
 // FromRequestID returns a request ID from the given context if one is present.
 // Returns the empty string if a request ID cannot be found.
 func FromRequestID(c *gin.Context) string {
-	return c.GetString(ctxKeyRequestID)
+	v, _ := c.Request.Context().Value(ctxKeyRequestID{}).(string)
+	return v
+	//	return c.GetString(ctxKeyRequestID)
 }
 
 // nextRequestID generates the next request ID.
