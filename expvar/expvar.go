@@ -4,10 +4,10 @@ import (
 	"expvar"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/thinkgos/gin-middlewares/wrap"
 )
 
 func Handler() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		expvar.Handler().ServeHTTP(c.Writer, c.Request)
-	}
+	return wrap.Handler(expvar.Handler())
 }

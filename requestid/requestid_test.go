@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thinkgos/http-middlewares/requestid"
 )
 
 func TestRequestID(t *testing.T) {
@@ -42,9 +43,9 @@ func TestRequestID(t *testing.T) {
 
 		r := gin.New()
 
-		RequestIDHeader = test.requestIDHeader
+		requestid.RequestIDHeader = test.requestIDHeader
 
-		r.Use(RequestID)
+		r.Use(RequestID())
 		r.GET("/", func(c *gin.Context) {
 			requestID := FromRequestID(c)
 			response := fmt.Sprintf("RequestID: %s", requestID)

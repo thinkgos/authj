@@ -13,7 +13,7 @@ import (
 func main() {
 	log.Println(os.Getpid())
 	router := gin.New()
-	router.Use(requestid.RequestID)
+	router.Use(requestid.RequestID())
 	router.GET("/", func(c *gin.Context) {
 		fmt.Println(requestid.FromRequestID(c))
 	})
