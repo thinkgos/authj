@@ -83,5 +83,5 @@ func FromRequestID(c *gin.Context) string {
 
 // nextRequestID generates the next request ID.
 func nextRequestID() string {
-	return fmt.Sprintf("%s-%010x", prefix, atomic.AddUint64(&sequenceId, 1))
+	return fmt.Sprintf("%s-%010d", prefix, atomic.AddUint64(&sequenceId, 1))
 }
