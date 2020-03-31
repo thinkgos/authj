@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -9,6 +11,7 @@ import (
 )
 
 func main() {
+	log.Println(os.Getpid())
 	router := gin.New()
 	router.Use(requestid.RequestID)
 	router.GET("/", func(c *gin.Context) {

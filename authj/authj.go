@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// cttAuthKey is a value for use with context.WithValue. It's used as
+// ctxAuthKey is a value for use with context.WithValue. It's used as
 // a pointer so it fits in an interface{} without allocation. This technique
 // for defining context keys was copied from Go 1.7's new use of context in net/http.
-type cttAuthKey struct{}
+type ctxAuthKey struct{}
 
 // NewAuthorizer returns the authorizer
 // uses a Casbin enforcer and Subject function as input
@@ -41,13 +41,13 @@ func NewAuthorizer(e *casbin.Enforcer) gin.HandlerFunc {
 
 // subject returns the value associated with this context for subjectCtxKey,
 func subject(c *gin.Context) string {
-	v, _ := c.Request.Context().Value(cttAuthKey{}).(string)
+	v, _ := c.Request.Context().Value(ctxAuthKey{}).(string)
 	return v
 }
 
 // ContextWithSubject return a copy of parent in which the value associated with
 // subjectCtxKey is subject.
 func ContextWithSubject(c *gin.Context, subject string) {
-	ctx := context.WithValue(c.Request.Context(), cttAuthKey{}, subject)
+	ctx := context.WithValue(c.Request.Context(), ctxAuthKey{}, subject)
 	c.Request = c.Request.WithContext(ctx)
 }
