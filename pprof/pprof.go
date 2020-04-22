@@ -4,8 +4,6 @@ import (
 	"net/http/pprof"
 
 	"github.com/gin-gonic/gin"
-
-	"github.com/thinkgos/gin-middlewares/wrap"
 )
 
 const (
@@ -24,17 +22,17 @@ func Router(router *gin.Engine, prefixOptions ...string) {
 
 	group := router.Group(prefix)
 	{
-		group.GET("/", wrap.HandlerFunc(pprof.Index))
-		group.GET("/cmdline", wrap.HandlerFunc(pprof.Cmdline))
-		group.GET("/profile", wrap.HandlerFunc(pprof.Profile))
-		group.POST("/symbol", wrap.HandlerFunc(pprof.Symbol))
-		group.GET("/symbol", wrap.HandlerFunc(pprof.Symbol))
-		group.GET("/trace", wrap.HandlerFunc(pprof.Trace))
-		group.GET("/allocs", wrap.Handler(pprof.Handler("allocs")))
-		group.GET("/block", wrap.Handler(pprof.Handler("block")))
-		group.GET("/goroutine", wrap.Handler(pprof.Handler("goroutine")))
-		group.GET("/heap", wrap.Handler(pprof.Handler("heap")))
-		group.GET("/mutex", wrap.Handler(pprof.Handler("mutex")))
-		group.GET("/threadcreate", wrap.Handler(pprof.Handler("threadcreate")))
+		group.GET("/", gin.WrapF(pprof.Index))
+		group.GET("/cmdline", gin.WrapF(pprof.Cmdline))
+		group.GET("/profile", gin.WrapF(pprof.Profile))
+		group.POST("/symbol", gin.WrapF(pprof.Symbol))
+		group.GET("/symbol", gin.WrapF(pprof.Symbol))
+		group.GET("/trace", gin.WrapF(pprof.Trace))
+		group.GET("/allocs", gin.WrapH(pprof.Handler("allocs")))
+		group.GET("/block", gin.WrapH(pprof.Handler("block")))
+		group.GET("/goroutine", gin.WrapH(pprof.Handler("goroutine")))
+		group.GET("/heap", gin.WrapH(pprof.Handler("heap")))
+		group.GET("/mutex", gin.WrapH(pprof.Handler("mutex")))
+		group.GET("/threadcreate", gin.WrapH(pprof.Handler("threadcreate")))
 	}
 }

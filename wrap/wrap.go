@@ -25,17 +25,3 @@ func HTTPf(handler func(next http.HandlerFunc) http.HandlerFunc) func(c *gin.Con
 		}).ServeHTTP(c.Writer, c.Request)
 	}
 }
-
-// HandlerFunc wrap http.HandlerFunc
-func HandlerFunc(h http.HandlerFunc) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		h.ServeHTTP(c.Writer, c.Request)
-	}
-}
-
-// Handler wrap http.Handler
-func Handler(h http.Handler) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		h.ServeHTTP(c.Writer, c.Request)
-	}
-}
