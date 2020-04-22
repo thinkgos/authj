@@ -49,8 +49,7 @@ func TestRequestID(t *testing.T) {
 		r.GET("/", func(c *gin.Context) {
 			requestID := FromRequestID(c)
 			response := fmt.Sprintf("RequestID: %s", requestID)
-			w.WriteString(response)
-
+			_, _ = w.WriteString(response)
 		})
 		r.ServeHTTP(w, test.request())
 

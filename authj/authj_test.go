@@ -91,7 +91,7 @@ func TestRBAC(t *testing.T) {
 	testAuthjRequest(t, router, "cathy", "/dataset2/item", "DELETE", 403)
 
 	// delete all roles on user cathy, so cathy cannot access any resources now.
-	e.DeleteRolesForUser("cathy")
+	_, _ = e.DeleteRolesForUser("cathy")
 
 	testAuthjRequest(t, router, "cathy", "/dataset1/item", "GET", 403)
 	testAuthjRequest(t, router, "cathy", "/dataset1/item", "POST", 403)
