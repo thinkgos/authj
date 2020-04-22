@@ -16,23 +16,35 @@ import (
 	"go.uber.org/zap"
 )
 
+// Option logger option
 type Option func(c *Config)
 
+// WithTimeFormat optional a time package format string (e.g. time.RFC3339).
 func WithTimeFormat(layout string) Option {
 	return func(c *Config) {
 		c.timeFormat = layout
 	}
 }
 
+// WithUTC a boolean stating whether to use UTC time zone or local.(default local).
 func WithUTC() Option {
 	return func(c *Config) {
 		c.utc = true
 	}
 }
 
+// WithCustomFields optional custom field
+func WithCustomFields(fields ...func(c *gin.Context) zap.Field) Option {
+	return func(c *Config) {
+		c.customField = fields
+	}
+}
+
+// Config logger config
 type Config struct {
-	timeFormat string
-	utc        bool
+	timeFormat  string
+	utc         bool
+	customField []func(c *gin.Context) zap.Field
 }
 
 // Logger returns a gin.HandlerFunc (middleware) that logs requests using uber-go/zap.
@@ -40,11 +52,8 @@ type Config struct {
 // Requests with errors are logged using zap.Error().
 // Requests without errors are logged using zap.Info().
 //
-// It receives:
-//   1. A time package format string (e.g. time.RFC3339).
-//   2. A boolean stating whether to use UTC time zone or local.
 func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
-	cfg := Config{time.RFC3339, false}
+	cfg := Config{time.RFC3339, false, nil}
 	for _, opt := range opts {
 		opt(&cfg)
 	}
@@ -67,16 +76,18 @@ func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
 				logger.Error(e)
 			}
 		} else {
-			logger.Info(path,
-				zap.Int("status", c.Writer.Status()),
+			fields := []zap.Field{zap.Int("status", c.Writer.Status()),
 				zap.String("method", c.Request.Method),
 				zap.String("path", path),
 				zap.String("query", query),
 				zap.String("ip", c.ClientIP()),
 				zap.String("user-agent", c.Request.UserAgent()),
 				zap.String("time", end.Format(cfg.timeFormat)),
-				zap.Duration("latency", latency),
-			)
+				zap.Duration("latency", latency)}
+			for _, field := range cfg.customField {
+				fields = append(fields, field(c))
+			}
+			logger.Info(path, fields...)
 		}
 	}
 }
