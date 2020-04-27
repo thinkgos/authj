@@ -11,5 +11,9 @@ middleware for gin
 
 
 # middleware
-- [authj](authj) is an authorization middleware, it's based on
-                  [casbin](https://github.com/casbin/casbin).
+- [authj](authj) is an authorization middleware, it's based on [casbin](https://github.com/casbin/casbin).
+- [expvar](expvar) is handler wrap expvar.Handler.
+- [gzap](gzap) is gzap provides log handling using zap package.
+- [pprof](pprof)the standard HandlerFuncs from the net/http/pprof package with the provided gin.Engine.
+- [requestid](requestid) is a middleware that injects a request ID into the context of each request.
+

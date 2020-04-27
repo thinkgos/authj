@@ -1,4 +1,4 @@
-// Package ginzap provides log handling using zap package.
+// Package gzap provides log handling using zap package.
 // Code structure based on ginrus package.
 // see github.com/gin-contrib/zap
 package gzap
