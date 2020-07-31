@@ -3,12 +3,13 @@
 middleware for gin
 
 [![GoDoc](https://godoc.org/github.com/thinkgos/gin-middlewares?status.svg)](https://godoc.org/github.com/thinkgos/gin-middlewares)
+[![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/github.com/thinkgos/gin-middlewares?tab=doc)
 [![Build Status](https://travis-ci.org/thinkgos/gin-middlewares.svg)](https://travis-ci.org/thinkgos/gin-middlewares)
 [![codecov](https://codecov.io/gh/thinkgos/gin-middlewares/branch/master/graph/badge.svg)](https://codecov.io/gh/thinkgos/gin-middlewares)
 ![Action Status](https://github.com/thinkgos/gin-middlewares/workflows/Go/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/thinkgos/gin-middlewares)](https://goreportcard.com/report/github.com/thinkgos/gin-middlewares)
 [![Licence](https://img.shields.io/github/license/thinkgos/gin-middlewares)](https://raw.githubusercontent.com/thinkgos/gin-middlewares/master/LICENSE)
-
+[![Tag](https://img.shields.io/github/v/tag/thinkgos/gin-middlewares)](https://github.com/thinkgos/gin-middlewares/tags)
 
 # middleware
 - [authj](authj) is an authorization middleware, it's based on [casbin](https://github.com/casbin/casbin).
