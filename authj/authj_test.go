@@ -5,6 +5,7 @@
 package authj
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,8 +14,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func testAuthjRequest(t *testing.T, router *gin.Engine, user string, path string, method string, code int) {
-	r, _ := http.NewRequest(method, path, nil)
+func testAuthjRequest(t *testing.T, router http.Handler, user, path, method string, code int) {
+	r, _ := http.NewRequestWithContext(context.TODO(), method, path, nil)
 	r.SetBasicAuth(user, "123")
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, r)

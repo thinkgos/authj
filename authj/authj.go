@@ -17,7 +17,7 @@ type ctxAuthKey struct{}
 // uses a Casbin enforcer and Subject function as input
 func NewAuthorizer(e *casbin.Enforcer) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		//checks the userName,path,method permission combination from the request.
+		// checks the userName,path,method permission combination from the request.
 		allowed, err := e.Enforce(subject(c), c.Request.URL.Path, c.Request.Method)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
