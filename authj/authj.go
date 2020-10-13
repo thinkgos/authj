@@ -15,7 +15,7 @@ type ctxAuthKey struct{}
 
 // NewAuthorizer returns the authorizer
 // uses a Casbin enforcer and Subject function as input
-func NewAuthorizer(e *casbin.Enforcer) gin.HandlerFunc {
+func NewAuthorizer(e *casbin.Enforcer, subject func(c *gin.Context) string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// checks the userName,path,method permission combination from the request.
 		allowed, err := e.Enforce(subject(c), c.Request.URL.Path, c.Request.Method)
@@ -37,8 +37,8 @@ func NewAuthorizer(e *casbin.Enforcer) gin.HandlerFunc {
 	}
 }
 
-// subject returns the value associated with this context for subjectCtxKey,
-func subject(c *gin.Context) string {
+// Subject returns the value associated with this context for subjectCtxKey,
+func Subject(c *gin.Context) string {
 	val, _ := c.Request.Context().Value(ctxAuthKey{}).(string)
 	return val
 }

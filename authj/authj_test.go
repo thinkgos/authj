@@ -32,7 +32,7 @@ func TestBasic(t *testing.T) {
 	router.Use(func(context *gin.Context) {
 		ContextWithSubject(context, "alice")
 	})
-	router.Use(NewAuthorizer(e))
+	router.Use(NewAuthorizer(e, Subject))
 	router.Any("/*anypath", func(c *gin.Context) {
 		c.Status(200)
 	})
@@ -50,7 +50,7 @@ func TestPathWildcard(t *testing.T) {
 	router.Use(func(context *gin.Context) {
 		ContextWithSubject(context, "bob")
 	})
-	router.Use(NewAuthorizer(e))
+	router.Use(NewAuthorizer(e, Subject))
 
 	router.Any("/*anypath", func(c *gin.Context) {
 		c.Status(200)
@@ -78,7 +78,7 @@ func TestRBAC(t *testing.T) {
 	router.Use(func(context *gin.Context) {
 		ContextWithSubject(context, "cathy")
 	})
-	router.Use(NewAuthorizer(e))
+	router.Use(NewAuthorizer(e, Subject))
 	router.Any("/*anypath", func(c *gin.Context) {
 		c.Status(200)
 	})
