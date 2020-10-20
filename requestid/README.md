@@ -9,7 +9,7 @@ requestid is an requestId(traceId) middleware for [Gin](https://github.com/gin-g
 ## Installation
 
 ```bash
-    go get github.com/thinkgos/requestid
+    go get github.com/thinkgos/gin-middlewares/requestid
 ```
 
 ## Simple Example
