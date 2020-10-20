@@ -12,6 +12,7 @@ import (
 // where "random" is a base62 random string that uniquely identifies this go
 // process, and where the last number is an atomically incremented request
 // counter.
+// it is format like {hostname}-{pid}-{init-rand-value}-{sequence}
 func RequestID() gin.HandlerFunc {
 	return wrap.HTTP(requestid.RequestID)
 }
