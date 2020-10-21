@@ -23,6 +23,7 @@ func NewAuthorizer(e casbin.IEnforcer, subject func(c *gin.Context) string) gin.
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"code":    http.StatusInternalServerError,
 				"message": "Permission validation errors occur!",
+				"msg":     "Permission validation errors occur!",
 			})
 			return
 		} else if !allowed {
@@ -30,6 +31,7 @@ func NewAuthorizer(e casbin.IEnforcer, subject func(c *gin.Context) string) gin.
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
 				"code":    http.StatusForbidden,
 				"message": "Permission denied!",
+				"msg":     "Permission denied!",
 			})
 			return
 		}
