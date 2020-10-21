@@ -21,17 +21,15 @@ func NewAuthorizer(e casbin.IEnforcer, subject func(c *gin.Context) string) gin.
 		allowed, err := e.Enforce(subject(c), c.Request.URL.Path, c.Request.Method)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-				"code":    http.StatusInternalServerError,
-				"message": "Permission validation errors occur!",
-				"msg":     "Permission validation errors occur!",
+				"code": http.StatusInternalServerError,
+				"msg":  "Permission validation errors occur!",
 			})
 			return
 		} else if !allowed {
 			// the 403 Forbidden to the client
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
-				"code":    http.StatusForbidden,
-				"message": "Permission denied!",
-				"msg":     "Permission denied!",
+				"code": http.StatusForbidden,
+				"msg":  "Permission denied!",
 			})
 			return
 		}
