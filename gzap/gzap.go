@@ -16,7 +16,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Option logger option
+// Option logger/recover option
 type Option func(c *Config)
 
 // WithTimeFormat optional a time package format string (e.g. time.RFC3339).
@@ -36,24 +36,23 @@ func WithUTC() Option {
 // WithCustomFields optional custom field
 func WithCustomFields(fields ...func(c *gin.Context) zap.Field) Option {
 	return func(c *Config) {
-		c.customField = fields
+		c.customFields = fields
 	}
 }
 
-// Config logger config
+// Config logger/recover config
 type Config struct {
-	timeFormat  string
-	utc         bool
-	customField []func(c *gin.Context) zap.Field
+	timeFormat   string
+	utc          bool
+	customFields []func(c *gin.Context) zap.Field
 }
 
 // Logger returns a gin.HandlerFunc (middleware) that logs requests using uber-go/zap.
 //
 // Requests with errors are logged using zap.Error().
 // Requests without errors are logged using zap.Info().
-//
 func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
-	cfg := Config{time.RFC3339, false, nil}
+	cfg := Config{time.RFC3339Nano, false, nil}
 	for _, opt := range opts {
 		opt(&cfg)
 	}
@@ -76,15 +75,17 @@ func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
 				logger.Error(e)
 			}
 		} else {
-			fields := []zap.Field{zap.Int("status", c.Writer.Status()),
+			fields := []zap.Field{
+				zap.Int("status", c.Writer.Status()),
 				zap.String("method", c.Request.Method),
 				zap.String("path", path),
 				zap.String("query", query),
 				zap.String("ip", c.ClientIP()),
 				zap.String("user-agent", c.Request.UserAgent()),
 				zap.String("time", end.Format(cfg.timeFormat)),
-				zap.Duration("latency", latency)}
-			for _, field := range cfg.customField {
+				zap.Duration("latency", latency),
+			}
+			for _, field := range cfg.customFields {
 				fields = append(fields, field(c))
 			}
 			logger.Info(path, fields...)
@@ -97,7 +98,11 @@ func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
 // All errors are logged using zap.Error().
 // stack means whether output the stack info.
 // The stack info is easy to find where the error occurs but the stack info is too large.
-func Recovery(logger *zap.Logger, stack bool) gin.HandlerFunc {
+func Recovery(logger *zap.Logger, stack bool, opts ...Option) gin.HandlerFunc {
+	cfg := Config{time.RFC3339Nano, false, nil}
+	for _, opt := range opts {
+		opt(&cfg)
+	}
 	return func(c *gin.Context) {
 		defer func() {
 			if err := recover(); err != nil {
@@ -117,7 +122,7 @@ func Recovery(logger *zap.Logger, stack bool) gin.HandlerFunc {
 				if brokenPipe {
 					logger.Error(c.Request.URL.Path,
 						zap.Any("error", err),
-						zap.String("request", string(httpRequest)),
+						zap.ByteString("request", httpRequest),
 					)
 					// If the connection is dead, we can't write a status to it.
 					c.Error(err.(error)) // nolint: errcheck
@@ -125,20 +130,22 @@ func Recovery(logger *zap.Logger, stack bool) gin.HandlerFunc {
 					return
 				}
 
-				if stack {
-					logger.Error("[Recovery from panic]",
-						zap.Time("time", time.Now()),
-						zap.Any("error", err),
-						zap.String("request", string(httpRequest)),
-						zap.String("stack", string(debug.Stack())),
-					)
-				} else {
-					logger.Error("[Recovery from panic]",
-						zap.Time("time", time.Now()),
-						zap.Any("error", err),
-						zap.String("request", string(httpRequest)),
-					)
+				now := time.Now()
+				if cfg.utc {
+					now = now.UTC()
 				}
+				fields := []zap.Field{
+					zap.String("time", now.Format(cfg.timeFormat)),
+					zap.Any("error", err),
+					zap.ByteString("request", httpRequest),
+				}
+				for _, field := range cfg.customFields {
+					fields = append(fields, field(c))
+				}
+				if stack {
+					fields = append(fields, zap.ByteString("stack", debug.Stack()))
+				}
+				logger.Error("[Recovery from panic]", fields...)
 				c.AbortWithStatus(http.StatusInternalServerError)
 			}
 		}()

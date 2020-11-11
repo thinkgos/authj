@@ -22,15 +22,20 @@ func main() {
 	r.Use(gzap.Logger(logger,
 		gzap.WithTimeFormat(time.RFC3339),
 		gzap.WithUTC(),
-		gzap.WithCustomFields(func(c *gin.Context) zap.Field {
-			return zap.String("custom field1", c.ClientIP())
-		}, func(c *gin.Context) zap.Field {
-			return zap.String("custom field2", c.ClientIP())
-		})))
+		gzap.WithCustomFields(
+			func(c *gin.Context) zap.Field { return zap.String("custom field1", c.ClientIP()) },
+			func(c *gin.Context) zap.Field { return zap.String("custom field2", c.ClientIP()) },
+		),
+	))
 
 	// Logs all panic to error log
 	//   - stack means whether output the stack info.
-	r.Use(gzap.Recovery(logger, true))
+	r.Use(gzap.Recovery(logger, true,
+		gzap.WithCustomFields(
+			func(c *gin.Context) zap.Field { return zap.String("custom field1", c.ClientIP()) },
+			func(c *gin.Context) zap.Field { return zap.String("custom field2", c.ClientIP()) },
+		),
+	))
 
 	// Example ping request.
 	r.GET("/ping", func(c *gin.Context) {
