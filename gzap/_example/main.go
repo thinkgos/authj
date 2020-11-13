@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -45,6 +46,11 @@ func main() {
 	// Example when panic happen.
 	r.GET("/panic", func(c *gin.Context) {
 		panic("An unexpected error happen!")
+	})
+
+	r.GET("/error", func(c *gin.Context) {
+		c.Error(errors.New("An error happen 1")) // nolint: errcheck
+		c.Error(errors.New("An error happen 2")) // nolint: errcheck
 	})
 
 	// Listen and Server in 0.0.0.0:8080
