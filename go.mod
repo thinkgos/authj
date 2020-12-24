@@ -3,7 +3,7 @@ module github.com/thinkgos/gin-middlewares
 go 1.14
 
 require (
-	github.com/casbin/casbin/v2 v2.19.6
+	github.com/casbin/casbin/v2 v2.19.7
 	github.com/didip/tollbooth/v5 v5.2.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
@@ -17,7 +17,7 @@ require (
 	github.com/ugorji/go v1.2.2 // indirect
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
-	golang.org/x/sys v0.0.0-20201221093633-bc327ba9c2f0 // indirect
+	golang.org/x/sys v0.0.0-20201223074533-0d417f636930 // indirect
 	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
