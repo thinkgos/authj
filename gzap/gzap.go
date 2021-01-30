@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/atomic"
 	"go.uber.org/zap"
 )
 
@@ -40,10 +41,18 @@ func WithCustomFields(fields ...func(c *gin.Context) zap.Field) Option {
 	}
 }
 
+// WithDisable optional disable this feature.
+func WithDisable(b *atomic.Bool) Option {
+	return func(c *Config) {
+		c.disable = b
+	}
+}
+
 // Config logger/recover config
 type Config struct {
 	timeFormat   string
 	utc          bool
+	disable      *atomic.Bool
 	customFields []func(c *gin.Context) zap.Field
 }
 
@@ -52,11 +61,20 @@ type Config struct {
 // Requests with errors are logged using zap.Error().
 // Requests without errors are logged using zap.Info().
 func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
-	cfg := Config{time.RFC3339Nano, false, nil}
+	cfg := Config{
+		time.RFC3339Nano,
+		false,
+		atomic.NewBool(false),
+		nil,
+	}
 	for _, opt := range opts {
 		opt(&cfg)
 	}
 	return func(c *gin.Context) {
+		if cfg.disable.Load() {
+			c.Next()
+			return
+		}
 		start := time.Now()
 		// some evil middlewares modify this values
 		path := c.Request.URL.Path
@@ -99,11 +117,20 @@ func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
 // stack means whether output the stack info.
 // The stack info is easy to find where the error occurs but the stack info is too large.
 func Recovery(logger *zap.Logger, stack bool, opts ...Option) gin.HandlerFunc {
-	cfg := Config{time.RFC3339Nano, false, nil}
+	cfg := Config{
+		time.RFC3339Nano,
+		false,
+		atomic.NewBool(false),
+		nil,
+	}
 	for _, opt := range opts {
 		opt(&cfg)
 	}
 	return func(c *gin.Context) {
+		if cfg.disable.Load() {
+			c.Next()
+			return
+		}
 		defer func() {
 			if err := recover(); err != nil {
 				// Check for a broken connection, as it is not really a
