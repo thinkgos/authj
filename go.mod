@@ -3,7 +3,7 @@ module github.com/thinkgos/gin-middlewares
 go 1.14
 
 require (
-	github.com/casbin/casbin/v2 v2.22.0
+	github.com/casbin/casbin/v2 v2.23.0
 	github.com/didip/tollbooth/v5 v5.2.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
