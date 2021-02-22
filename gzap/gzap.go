@@ -93,7 +93,8 @@ func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
 				logger.Error(e)
 			}
 		} else {
-			fields := []zap.Field{
+			fields := make([]zap.Field, 0, 8+len(cfg.customFields))
+			fields = append(fields,
 				zap.Int("status", c.Writer.Status()),
 				zap.String("method", c.Request.Method),
 				zap.String("path", path),
@@ -102,7 +103,7 @@ func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
 				zap.String("user-agent", c.Request.UserAgent()),
 				zap.String("time", end.Format(cfg.timeFormat)),
 				zap.Duration("latency", latency),
-			}
+			)
 			for _, field := range cfg.customFields {
 				fields = append(fields, field(c))
 			}
@@ -125,6 +126,11 @@ func Recovery(logger *zap.Logger, stack bool, opts ...Option) gin.HandlerFunc {
 	}
 	for _, opt := range opts {
 		opt(&cfg)
+	}
+	if stack {
+		cfg.customFields = append(cfg.customFields, func(c *gin.Context) zap.Field {
+			return zap.ByteString("stack", debug.Stack())
+		})
 	}
 	return func(c *gin.Context) {
 		if cfg.disable.Load() {
@@ -161,16 +167,14 @@ func Recovery(logger *zap.Logger, stack bool, opts ...Option) gin.HandlerFunc {
 				if cfg.utc {
 					now = now.UTC()
 				}
-				fields := []zap.Field{
+				fields := make([]zap.Field, 0, 3+len(cfg.customFields))
+				fields = append(fields,
 					zap.String("time", now.Format(cfg.timeFormat)),
 					zap.Any("error", err),
 					zap.ByteString("request", httpRequest),
-				}
+				)
 				for _, field := range cfg.customFields {
 					fields = append(fields, field(c))
-				}
-				if stack {
-					fields = append(fields, zap.ByteString("stack", debug.Stack()))
 				}
 				logger.Error("[Recovery from panic]", fields...)
 				c.AbortWithStatus(http.StatusInternalServerError)
