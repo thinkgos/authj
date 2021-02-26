@@ -44,9 +44,7 @@ func TestRequestID(t *testing.T) {
 
 		r := gin.New()
 
-		requestid.RequestIDHeader = test.requestIDHeader
-
-		r.Use(RequestID())
+		r.Use(RequestID(requestid.WithRequestIDHeader(test.requestIDHeader)))
 		r.GET("/", func(c *gin.Context) {
 			requestID := FromRequestID(c)
 			response := fmt.Sprintf("RequestID: %s", requestID)

@@ -7,7 +7,7 @@ import (
 )
 
 // HTTP wrap func(next http.Handler) http.Handler
-func HTTP(handler func(next http.Handler) http.Handler) func(c *gin.Context) {
+func HTTP(handler func(http.Handler) http.Handler) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			c.Request = r
@@ -17,7 +17,7 @@ func HTTP(handler func(next http.Handler) http.Handler) func(c *gin.Context) {
 }
 
 // HTTPf wrap func(next http.HandlerFunc) http.HandlerFunc
-func HTTPf(handler func(next http.HandlerFunc) http.HandlerFunc) func(c *gin.Context) {
+func HTTPf(handler func(http.HandlerFunc) http.HandlerFunc) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		handler(func(w http.ResponseWriter, r *http.Request) {
 			c.Request = r
